@@ -1,0 +1,60 @@
+include ../../global.jade
+doctype html
+html
+	head
+		+head
+	body
+		+barra
+		div.contcat
+			h1(style="padding-bottom:5px;margin:1em;border-bottom-style:inset").c.cpri.logo #{productos.Nombre}
+			div.c
+				div.w5
+					img(src="#{ruta}/images/#{productos.Imagenes[0]}", alt="").w7#imgpri
+					div.p5
+						each val in productos.Imagenes
+							img(src="#{ruta}/images/#{val}", alt="").w1.p5.chimage
+				div.w3.p10
+					h1.p10.cpri $ #{productos.Precio}
+					p.p10 #{productos.Descripcion}
+					if productos.Estado
+						h2 Estado: Disponible
+						if me
+							input(data-cost="#{productos.Precio}",data-me="#{me.Capital}",data-action="/buy/#{productos.Clase}",data-name="#{productos.Nombre}",type="submit",value="Comprar")#comprar
+							form(action="/fav/#{productos.Clase}",method="post")
+								input(type="submit",value="Agregar a Compras Favoritas")
+						else
+							input(type="submit",value="Comprar",data-rel="login").tool
+							input(type="submit",value="Agregar a Compras Favoritas",data-rel="login").tool
+					else
+						h2 Estado : Agotado
+						if me
+							form(action="/fav/#{productos.Clase}",method="post")
+								input(type="submit",value="Agregar a Compras Favoritas")
+						else
+							input(type="submit",value="Agregar a Compras Favoritas",data-rel="login").tool
+					if me && productos.Clase_Comprador==me.Clase
+						form(action="/nota",method="post")
+							input(type="hidden",name="cls",value="#{productos.Clase}")
+							input(type="submit",value="Crear Nota de Compra")
+					
+
+		div.contcat
+			div.c
+				h1.cpri.logo Datos del Vendedor
+				div.w5
+					h3.cpri Ubicación
+					label #{productos.Ubicacion}
+				div.w5
+					h3.cpri Nombre
+					label #{productos.Nombre_Usuario}
+		div.contcat
+			div.c
+				h1.cpri.logo Sugerencias
+				div.w8
+					each val in sugerencias
+						if val.Categoria==productos.Categoria
+							+contenedor(val)
+		+footer
+		+laterales
+		+tooltip
+		+script

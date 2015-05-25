@@ -1,0 +1,86 @@
+include ../../global.jade
+doctype html
+html
+	head
+		+head
+	body
+		if ru=="us"
+			div.contcat(style="width:93%")
+				h1(style="border-bottom-style:inset;font-family:'Lobster'")
+					a(href="#{ruta}").cpri FreeMarket
+				table
+					tr
+						td N°
+						td Nombre
+						td Email
+						td Compras
+						td Ventas
+					each usuario,index in usuarios
+						tr
+							td=index
+							td=usuario.Nombre
+							td=usuario.Email
+							td
+								table
+									tr
+										td Nombre producto
+										td Descripcion del producto
+										td Precio
+										td Fecha
+									each compra,val in compras
+										tr
+											td=compra.Nombre
+											td=compra.Descripcion
+											td=compra.Precio
+											td=compra.Fecha
+							td
+								table
+									tr
+										td Nombre producto
+										td Descripcion del producto
+										td Precio
+										td Fecha
+									each venta,val in ventas
+										tr
+											td=venta.Nombre
+											td=venta.Descripcion
+											td=venta.Precio
+											td=venta.Fecha
+		else
+			div.contcat
+				h1(style="border-bottom-style:inset;font-family:'Lobster'")
+					a(href="#{ruta}").cpri FreeMarket
+				table
+					if ru=="cl"
+						tr
+							td Numero
+							td Clave
+							td Valor
+							td Uso
+
+						each val,index in data
+							tr
+								td=index
+								td=val.Clave
+								td=val.Valor
+								td=val.Usada
+					if ru=="msg"
+						tr
+							td Numero
+							td Email
+							td Categoria
+							td Problema
+
+						each val,index in contacto
+							tr
+								td=index
+								td=val.Email
+								td=val.Categoria
+								td=val.Problema
+		if me &&me.Admin
+			div.w8.c
+				a(href="#{ruta}/admin")
+					input(type="submit",value="Regresar")
+
+
+	

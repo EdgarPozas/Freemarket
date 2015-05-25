@@ -1,0 +1,99 @@
+-var ruta='http://localhost'
+
+mixin head
+	meta(charset="utf-8")
+	link(rel="stylesheet", href="#{ruta}/css/style.css")
+	title FreeMarket
+mixin barra
+	div.bar
+		div.w8.p5
+			div.w2
+				a(href="#{ruta}")
+					h1.logo FreeMarket
+			div.w6
+				input(type="text",placeholder="¿Buscabas algo?",name="busqueda")#se
+				ul.box.fff(style="position:absolute;width:45%;text-align:left;left:27.5%;display:none")#lista
+					div#list
+			div.w2
+				div(style="margin-top:15px")
+					if me
+						label#name #{me.Nombre}
+						div.fff(style="position:fixed;width:10%;margin:1% 0 0 3%;display:none").box#lsme
+							ul
+								li
+									form(action="/logout",method="post")
+										button(style="background-color:transparent;border:none") Salir
+					else
+						label(data-rel="login").tool Ingresar
+						label(data-rel="register").tool Registrar
+				
+mixin contenedor(val)
+	div.contitem
+		a(href="#{ruta}/p/#{val.Clase}")
+			img(src="#{ruta}/images/#{val.Imagenes[0]}").w10
+		div
+			div(style="text-align:left").p5
+				label.p0.lato #{val.Nombre}
+				label.lato(style="display:block;color:#009688;<font-weight:bold></font-weight:bold>") $ #{val.Precio}
+mixin laterales
+	if me
+		div(style="position:fixed;top:20%;width:10%").fff.box
+			ul.c
+				li(data-rel="misp",style="font-size:0.9em").tool Mis Productos
+				li(data-rel="misv",style="font-size:0.9em").tool Mis Ventas
+				li(data-rel="misc",style="font-size:0.9em").tool Mis Compras
+				li(data-rel="futu",style="font-size:0.9em").tool Mis Compras Futuras
+		div(style="position:fixed;top:20%;right:0").fff.box
+			ul
+				li#precio
+		div(style="position:fixed;top:35%;right:0").fff.box
+			ul
+				li(data-rel="ven").tool Vender
+mixin tooltip
+	div(style="position:fixed;width:60%;top:20%;left:20%;display:none").fff.box.p10#tooltip
+		div(style="border-bottom-style:inset")
+			div.w9.c.in
+				label#titulo.lato.cpri titulo
+			div.w1
+				label._x_ x
+		div#contenido
+mixin footer
+	div(style="margin-top:3%;background-color:#004D40").box
+		div.w8.p10
+			label.lato.cfff Ayuda
+			label(data-rel="contacto").cfff.tool Contactanos
+			if me &&me.Admin
+				a(href="#{ruta}/admin").cfff Panel
+
+mixin script
+	script(src="#{ruta}/js/jquery-2.1.3.min.js")
+	if me
+		script.
+			var ME={x:"#{me.Clase}"}
+		script(src="#{ruta}/js/script.js")
+		script.
+			$(document).on("ready",function(){
+				function toFixed(value, precision) {
+					var precision = precision || 0,
+					power = Math.pow(10, precision),
+					absValue = Math.abs(Math.round(value * power)),
+					result = (value < 0 ? '-' : '') + String(Math.floor(absValue / power));
+					if (precision > 0) {
+						var fraction = String(absValue % power),
+						padding = new Array(Math.max(precision - fraction.length, 0) + 1).join('0');
+						result += '.' + padding + fraction;
+					}
+					return result;
+				}
+				$("#precio").text("$ "+toFixed(parseFloat("#{me.Capital}"),2))
+			});
+	else
+		script(src="#{ruta}/js/js.js")
+	if error
+		script.
+			$(document).on("ready",function(){
+				$("#titulo").text("#{error[0]}");
+				$("#contenido").html('<div class="c cpri"><h1>#{error[1]}</h1><input type="submit" id="acep" value="Aceptar" /></div>');
+				$("#acep").on("click",function(){$("#tooltip").slideToggle("fast")});
+				$("#tooltip").slideToggle("fast");
+			});

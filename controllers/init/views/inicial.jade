@@ -1,0 +1,62 @@
+include ../../global.jade
+doctype html
+html
+	head
+		+head
+	body
+		+barra
+
+		div.contcat
+			div.w2(style="border-right-style: inset;")
+				ul.c#cat
+					-var urls=["autos","computadoras","electrodomesticos","celulares","casas","animales","ropa","bisuteria","videojuegos","camaras"]
+					each categoria,index in ["Autos","Computadoras","Electrodomesticos","Celulares y accesorios","Casas","Animales","Ropa","Bisuteria","Videojuegos","Camaras"]
+						a(href="#{ruta}/c/#{urls[index]}")
+							li.lato #{categoria}
+			div(style="width:78%;display:inline-block").p5.c
+				if me
+					each val in productos
+						+contenedor(val)
+				else
+					if re[1]!="c" && re[1]!="s"
+						div.w10
+							img(src="#{ruta}/images/fondo4.jpg",style="height:11cm").w10#inicial
+							div(style="background-color:black;opacity:0.5;position:absolute;bottom:8cm;width:62.4%")
+								h1.cpri ¿Y tu ya has comprado en linea?
+								p(style="font-size:1.6em;font-weight:bold;color:white;").w6.cpri
+									| Compra en FreeMarket,	tus productos con solo un
+								input(type="submit", value="Click",style="background-color: #009688;font-weight:bold;color:white",data-rel="register").m7.tool
+							div#imagenes
+								img(src="#{ruta}/images/fondo1.jpg", alt="")
+								img(src="#{ruta}/images/fondo2.jpg", alt="")
+								img(src="#{ruta}/images/fondo3.jpg", alt="")
+								img(src="#{ruta}/images/fondo4.jpg", alt="")
+								img(src="#{ruta}/images/fondo1.jpg", alt="")
+							div
+								h1(style="border-bottom-style: inset;").cpri Contamos con:
+								div
+									div.w4.m5
+										ul
+											li Seguridad en tus compras
+											li Discrecion
+											li 
+											li go
+											li go
+									div.w4.m5
+										ul
+											li Categorias dinamicas
+											li go
+											li go
+											li go
+											li go
+						div.w10
+							h1(style="border-bottom-style: inset;").cpri Sugerencias
+							each val in productos
+								+contenedor(val)
+					else
+						each val in productos
+							+contenedor(val)
+		+footer
+		+laterales
+		+tooltip
+		+script

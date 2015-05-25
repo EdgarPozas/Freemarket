@@ -1,0 +1,52 @@
+include ../../global.jade
+doctype html
+html
+	head
+		+head
+	body
+		+barra
+		div.contcat
+			div
+				h1 Claves
+				div
+					ul
+						li
+							label Ver todas las Claves
+							form(action="/admin/cl",method="post")
+								input(type="submit",value="Ver todas las claves")
+						li
+							label Generar Claves
+							form(action="/admin/cl/gen",method="post")
+								input(type="number",name="num",placeholder="Ingrese numero de claves a generar",required)
+								input(type="submit",value="Crear")
+			div
+				h1 Usuarios
+				div
+					ul
+						li
+							label Ver todos los usuarios
+							form(action="/admin/us",method="post")
+								input(type="submit",value="Ver todos los usuarios")
+						li
+							label Ver usuario
+							form(action="/admin/us/v",method="post")
+								input(type="text",name="class",placeholder="Ingrese clase",required)
+								input(type="submit",value="Ver usuario")
+						li
+							label Banear usuario
+							form(action="/admin/us/del",method="post")
+								input(type="text",name="class",placeholder="Ingrese clase a eliminar",required)
+								input(type="submit",value="Eliminar")
+			div
+				h1 Contactanos
+				div
+					ul
+						li
+							label Ver todos los mensajes
+							form(action="/admin/msj",method="post")
+								input(type="submit",value="Ver todos los mensajes")
+
+		+footer
+		+laterales
+		+tooltip
+		+script
