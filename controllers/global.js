@@ -12,7 +12,7 @@ var logget=function(req,res,next){
 	else if(req.url[1]=="s"){
 		query=db.Productos.find({Nombre:{$regex:req.params.cat}});	
 	}
-	db.Productos.find().sort({_id:-1}).limit(3).exec(function(err,sugerencias){
+	db.Productos.find({Estado:true}).sort({_id:-1}).exec(function(err,sugerencias){
 		query.exec(function(err,productos){
 			if(req.session.session){
 				db.Usuarios.findOne({Clase:req.session.session.Clase}).exec(function(err,us){
@@ -35,7 +35,14 @@ var loggetadmin=function(req,res,next){
 }
 /*rutas post*/
 var logpost=function (req,res,next){
-	if(req.session.session){next()}
+	if(req.session.session){
+		db.Usuarios.findOne({Clase:req.session.session.Clase}).exec(function(err,us){
+			if(us){
+				req.session.session=us;
+				next()
+			}
+		});
+	}
 	else{res.redirect("/")}
 }
 var logadmin=function(req,res,next){

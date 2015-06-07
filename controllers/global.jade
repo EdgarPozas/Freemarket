@@ -11,7 +11,7 @@ mixin barra
 				a(href="#{ruta}")
 					h1.logo FreeMarket
 			div.w6
-				input(type="text",placeholder="¿Buscabas algo?",name="busqueda")#se
+				input(type="text",placeholder="¿Buscabas algo?",name="busqueda",autocomplete="off")#se
 				ul.box.fff(style="position:absolute;width:45%;text-align:left;left:27.5%;display:none")#lista
 					div#list
 			div.w2
@@ -62,8 +62,10 @@ mixin footer
 		div.w8.p10
 			label.lato.cfff Ayuda
 			label(data-rel="contacto").cfff.tool Contactanos
-			if me &&me.Admin
-				a(href="#{ruta}/admin").cfff Panel
+			if me
+				if me.Admin 
+					a(href="#{ruta}/admin").cfff Panel
+				label(data-rel="recargar").cfff.tool Recargar
 
 mixin script
 	script(src="#{ruta}/js/jquery-2.1.3.min.js")

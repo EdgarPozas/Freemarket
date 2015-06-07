@@ -4,8 +4,6 @@ $(document).on("ready",function(){
 		contar++;
 		if (contar<=4){
 			$("#inicial").fadeOut("fast").fadeIn("fast",function(){
-				console.log(imagenes[contar].attributes.src.value);
-				console.log(contenido[contar]);
 				$(this).attr("src",imagenes[contar].attributes.src.value);
 			});
 		}

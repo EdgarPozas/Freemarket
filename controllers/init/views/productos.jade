@@ -36,23 +36,31 @@ html
 						form(action="/nota",method="post")
 							input(type="hidden",name="cls",value="#{productos.Clase}")
 							input(type="submit",value="Crear Nota de Compra")
+						form(action="/vote/#{productos.Clase_Usuario}",method="post").m7.p5
+							input(type="range",min="0",max="10",name="rango",value="5")#range
+							label#ra 5
+							input(type="submit",value="Votar por compra")
 					
 
 		div.contcat
 			div.c
 				h1.cpri.logo Datos del Vendedor
-				div.w5
+				div.w3.p10
 					h3.cpri Ubicación
 					label #{productos.Ubicacion}
-				div.w5
+				div.w3.p10
 					h3.cpri Nombre
 					label #{productos.Nombre_Usuario}
+				div.w3.p10
+					h3.cpri Reputación
+					label #{productos.Votos}
+
 		div.contcat
 			div.c
 				h1.cpri.logo Sugerencias
 				div.w8
-					each val in sugerencias
-						if val.Categoria==productos.Categoria
+					each val,index in sugerencias
+						if val.Categoria==productos.Categoria && index<=2
 							+contenedor(val)
 		+footer
 		+laterales

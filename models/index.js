@@ -9,8 +9,10 @@
 			Contraseña:String,
 			Clase:String,
 			Email:String,
+			Votos:{type:Number,default:0},
 			Capital:{type:String,default:100},
 			Favoritos:[],
+			Votados:[],
 			Admin:{type:Boolean,default:false}
 		}),
 		Productos:mongoose.model("Productos",{
@@ -25,6 +27,7 @@
 			Clase_Usuario:String,
 			Ubicacion:String,
 			Clase_Comprador:String,
+			Votos:String,
 			Estado:{type:Boolean,default:true},
 		}),
 		Compras:mongoose.model("Compras",{

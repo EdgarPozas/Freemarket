@@ -1,25 +1,21 @@
 $(document).on("ready",function(){
+	$("#range").change(function(){
+		$(this).attr("value",$(this).val());
+		$("#ra").text($(this).val())
+	});
 	$("#comprar").click(function(e){
 		$("#contenido").html("");
 		if(parseInt($(this).attr("data-me"))>parseInt($(this).attr("data-cost"))){
 			$("#titulo").text("¿Confirmar?");
-			$("#contenido").html("<div class='c w9'>¿Esta seguro de que desea comprar <label style='padding:0;font-weight:bold' class='cpri'>"+$(this).attr("data-name")+"</label>?<div><form method='post' action="+$(this).attr("data-action")+" class='w4'><input type='submit' id='si' value='Si' /></form><input type='submit' class='w4 m7' value='No' id='no' /></div></div>")
+			$("#contenido").html("<div class='c w9'>¿Esta seguro de que desea comprar <label style='padding:0;font-weight:bold' class='cpri'>"+$(this).attr("data-name")+"</label>?<div><form id='com' method='post' action="+$(this).attr("data-action")+" class='w4'><input type='submit' id='si' value='Si' /></form><input type='submit' class='w4 m7' value='No' id='no' /></div></div>")
 		}
 		else{
 			$("#titulo").text("Saldo Insuficiente");
-			$("#contenido").html("<div class='c w9'>¿Desea Recargar?<div><input type='submit' value='Si' id='s' /><input type='submit' value='No' id='n' /></div></div>")
-			$("#s").on("click",function(){
-				$("#titulo").fadeOut("fast",function(){
-					$(this).fadeIn("fast").text("Recargar")
-				});
-				$("#contenido").fadeOut("fast",function(){
-					$(this).fadeIn("fast").html("<form action='/recargar' method='post'><input type='text' name='recarga' required /><input type='submit' value='Recargar' /></form>")
-				});
-			});
-			$("#n").on("click",function(){
-				$("#tooltip").slideToggle("fast");
-			});
+			recargar();
 		}
+		$("#no").on("click",function(){
+			$("#tooltip").slideToggle("fast");
+		});
 		$("#tooltip").slideToggle("fast");
 	});
 	$(".chimage").on("click",function(){
@@ -84,9 +80,23 @@ $(document).on("ready",function(){
 			title="Contactanos";
 			$("#contenido").html('<form action="/contactanos" method="post" class="c"><input type="email required" name="email" placeholder="Email para contactarnos" /><select name="cat"><option value="como">¿Como crear cuenta?</option><option value="comprar">No puedo comprar</option><option value="nollega">Mi compra no ha llegado</option></select><textarea name="comentario" required placeholder="Describenos tu problema"></textarea><input type="submit" value="Gracias" /></form>');
 		}
+		else if(tp=="recargar"){title="Recargar";recargar();}
 		$("#titulo").text(title);
 		$("#tooltip").slideToggle("fast");
 	});
+
+	function recargar(){
+		$("#contenido").html("<div class='c w9'>¿Desea Recargar?<div><input type='submit' value='Si' id='s' /><input type='submit' value='No' id='no' /></div></div>")
+		$("#s").on("click",function(){
+			$("#titulo").fadeOut("fast",function(){
+				$(this).fadeIn("fast").text("Recargar")
+			});
+			$("#contenido").fadeOut("fast",function(){
+				$(this).fadeIn("fast").html("<form action='/recargar' method='post'><input type='text' name='recarga' required /><input type='submit' value='Recargar' /></form>")
+			});
+		});
+		$("#no").on("click",function(){$("#tooltip").slideToggle("fast");});
+	}
 
 	$("._x_").on("click",function(){$("#tooltip").slideToggle("fast");});
 	$("#tooltip").draggable();

@@ -6,7 +6,14 @@ app.post("/recargar",global.logpost,function(req,res){
 	db.Claves.findOne({Clave:req.body.recarga,Usada:false}).exec(function(err,clave){
 		if(clave){
 			console.log("clave usada");
-			db.Claves.remove({Clave:req.body.recarga}).exec();
+			var cap=parseFloat(req.session.session.Capital)+parseFloat(clave.Valor);
+			db.Usuarios.update({Clase:req.session.session.Clase},{$set:{Capital:cap}}).exec(function(err,u){
+				if(!err){
+					db.Claves.remove({Clave:req.body.recarga}).exec();
+					res.redirect("/");
+				}
+
+			});
 		}
 		else{
 			console.log("clave ya usada o no encontrada");
@@ -76,6 +83,7 @@ app.post("/vender",global.logpost,function(req,res){
 		Nombre_Usuario:req.session.session.Nombre,
 		Clase_Usuario:req.session.session.Clase,
 		Fecha:global.date(),
+		Votos:req.session.session.Votos,
 		Ubicacion:req.body.ubicacion
 	}).save(function(err,pro){
 		if(!err){
@@ -102,40 +110,39 @@ app.post("/buy/:class",global.logpost,function(req,res){
 		if(producto){
 			db.Usuarios.findOne({Clase:req.session.session.Clase}).exec(function(err,comprador){
 				if ((parseFloat(comprador.Capital)-parseFloat(producto.Precio))>=0){
-						//hay dinero suficiente
-						console.log("si hay");
-						db.Compras({
-							Nombre:producto.Nombre,
-							Categoria:producto.Categoria,
-							Precio:producto.Precio,
-							Descripcion:producto.Descripcion,
-							Clase:producto.Clase,
-							Imagenes:producto.Imagenes,
-							Vendedor_Clase:producto.Clase_Usuario,
-							Comprador_Clase:comprador.Clase,
-							Fecha:global.date()
-						}).save();
-						db.Ventas({
-							Nombre:producto.Nombre,
-							Categoria:producto.Categoria,
-							Precio:producto.Precio,
-							Imagenes:producto.Imagenes,
-							Descripcion:producto.Descripcion,
-							Clase:producto.Clase,
-							Vendedor_Clase:producto.Clase_Usuario,
-							Fecha:global.date()
-						}).save();
-						db.Usuarios.update({Clase:comprador.Clase},{$set:{Capital:parseFloat(comprador.Capital)-parseFloat(producto.Precio)}}).exec();
-						db.Usuarios.findOne({Clase:producto.Clase_Usuario}).exec(function(err,us){
-							db.Usuarios.update({Clase:producto.Clase_Usuario},{$set:{Capital:parseFloat(us.Capital)+parseFloat(producto.Precio)}}).exec();
-						});
-						db.Productos.update({Clase:req.params.class},{$set:{Estado:false,Clase_Comprador:comprador.Clase}}).exec();
+					//hay dinero suficiente
+					db.Compras({
+						Nombre:producto.Nombre,
+						Categoria:producto.Categoria,
+						Precio:producto.Precio,
+						Descripcion:producto.Descripcion,
+						Clase:producto.Clase,
+						Imagenes:producto.Imagenes,
+						Vendedor_Clase:producto.Clase_Usuario,
+						Comprador_Clase:comprador.Clase,
+						Fecha:global.date()
+					}).save();
+					db.Ventas({
+						Nombre:producto.Nombre,
+						Categoria:producto.Categoria,
+						Precio:producto.Precio,
+						Imagenes:producto.Imagenes,
+						Descripcion:producto.Descripcion,
+						Clase:producto.Clase,
+						Vendedor_Clase:producto.Clase_Usuario,
+						Fecha:global.date()
+					}).save();
+					db.Usuarios.update({Clase:comprador.Clase},{$set:{Capital:parseFloat(comprador.Capital)-parseFloat(producto.Precio)}}).exec();
+					db.Usuarios.findOne({Clase:producto.Clase_Usuario}).exec(function(err,us){
+						db.Usuarios.update({Clase:producto.Clase_Usuario},{$set:{Capital:parseFloat(us.Capital)+parseFloat(producto.Precio)}}).exec();
+					});
+					db.Productos.update({Clase:req.params.class},{$set:{Estado:false,Clase_Comprador:comprador.Clase}}).exec();
+					res.redirect("/p/"+req.params.class);
 				}
 				else{
 					//No hay dinero suficiente
 					res.redirect("/adv/6")
 				}
-				res.redirect("/p/"+req.params.class);
 			});
 		}
 		else{console.log("no hay compra");res.redirect("/");}
@@ -145,9 +152,20 @@ app.post("/buy/:class",global.logpost,function(req,res){
 app.post("/nota",global.logpost,function(req,res){
 	db.Compras.findOne({Comprador_Clase:req.session.session.Clase}).exec(function(er,compra){
 		if(compra){
-			res.render(__dirname+"/../init/views/nota.jade",{compra:compra,me:req.session.session});
+			db.Usuarios.findOne({Clase:compra.Vendedor_Clase}).exec(function(er,vendedor){
+				res.render(__dirname+"/../init/views/nota.jade",{compra:compra,vendedor:vendedor,me:req.session.session});
+			});
 		}
 		else{
+			res.redirect("/");
+		}
+	});
+});
+
+app.post("/vote/:clase",global.logpost,function(req,res){
+	db.Usuarios.findOne({Clase:req.params.clase}).exec(function(err,us){
+		if(us){
+			db.Usuarios.update({Clase:req.params.clase},{$set:{Votos:us.Votos+parseInt(req.body.rango)}}).exec();
 			res.redirect("/");
 		}
 	});

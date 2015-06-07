@@ -9,14 +9,48 @@ html
 				a(href="#{ruta}").cpri FreeMarket
 			ul
 				li
-					label ads
+					h3 Producto
+					label Referencia:
+					label #{compra.Clase}
+					br
+					label Producto:
+					label #{compra.Nombre}
+					br
+					label Precio:
+					label #{compra.Precio}
+					br
+					label Descripción:
+					label #{compra.Descripcion}
+					br
+					label Categoria
+					label #{compra.Categoria}
 				li
-					label ads
+					h3 Comprador
+					label Referencia:
+					label #{me.Clase}
+					br
+					label Nombre:
+					label #{me.Nombre}
+					br
+					label Email:
+					label #{me.Email}
+					br
+					label Reputación:
+					label #{me.Votos}
 				li
-					label ads
-				li
-					label ads
-			a(href="#{ruta}").cpri.m7 Imprimir
+					h3 Vendedor
+					label Referencia:
+					label #{vendedor.Clase}
+					br
+					label Nombre:
+					label #{vendedor.Nombre}
+					br
+					label Email:
+					label #{vendedor.Email}
+					br
+					label Reputación:
+					label #{vendedor.Votos}
+			button(type="submit",style="border:none;background:transparent",onclick="window.print()").cpri.m7.lato Imprimir
 			a(href="#{ruta}").cpri.m7 Regresar
 
 	
