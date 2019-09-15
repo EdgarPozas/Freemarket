@@ -1,3 +1,1 @@
-Aplicación de comercio electronico usando Iojs-Nodejs
-
-Edgar Pozas
+Simple applitation for e-commerce using Iojs-Nodejs
